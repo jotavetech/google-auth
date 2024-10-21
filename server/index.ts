@@ -18,6 +18,8 @@ app.get("/ping", async (req, reply) => {
 app.post("/api/auth/google", async (req, reply) => {
   const { credential } = req.body as any;
 
+  // Recebe o token do Google e faz uma requisição na API do Google que retorna os dados do usuário (email, nome, foto).
+
   try {
     const userResponse = await fetch(
       "https://www.googleapis.com/oauth2/v3/userinfo",
