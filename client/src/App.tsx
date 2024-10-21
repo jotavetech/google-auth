@@ -3,9 +3,15 @@ import "./App.css";
 
 import { CredentialResponse, useGoogleLogin } from "@react-oauth/google";
 
+type User = {
+  email: string;
+  name: string;
+  picture: string;
+};
+
 function App() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const googleLogin = useGoogleLogin({
     onSuccess: (credential) => fetchLogin(credential as CredentialResponse),
@@ -26,7 +32,7 @@ function App() {
 
     const data = await response.json();
 
-    setUser(data);
+    setUser(data.userData);
 
     console.log("Resposta do servidor:", data);
   };
@@ -34,11 +40,25 @@ function App() {
   return (
     <>
       {user ? <h2>Autenticado</h2> : <h2>Faça Login com Google</h2>}
-      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 5,
+        }}
+      >
         {!user && (
           <button onClick={() => googleLogin()}>Entrar com Google!</button>
         )}
-        {user && user.userData.email}
+        {user && (
+          <img
+            src={user.picture}
+            alt="Foto do usuário"
+            style={{ width: 100, height: 100 }}
+          />
+        )}
+        {user && user.email}
       </div>
     </>
   );
